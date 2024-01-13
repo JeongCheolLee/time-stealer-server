@@ -4,28 +4,34 @@ import {
   BadRequestException,
   Injectable,
 } from '@nestjs/common';
-import { BooleanSurvey } from '../entities/boolean-survey.entity';
+import { BooleanSurveyQuestion } from '../entities/boolean-survey-question.entity';
 import { Pagination } from 'src/common/decorators/pagination-query.decorator';
-import { FindBooleanSurveyListDto } from '../dto/find-boolean-survey-list.dto';
+import { FindBooleanSurveyQuestionListDto } from '../dto/find-boolean-survey-question-list.dto';
 import { commonConstants } from 'src/common/constants/common.constants';
 import { constants } from '../boolean-survey.constants';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class BooleanSurveyRepository extends Repository<BooleanSurvey> {
-  async findBooleanSurveyList(
-    findBooleanSurveyListDto: FindBooleanSurveyListDto,
+export class BooleanSurveyQuestionRepository {
+  constructor(
+    @InjectRepository(BooleanSurveyQuestion)
+    private booleanSurveyQuestion: Repository<BooleanSurveyQuestion>,
+  ) {}
+
+  async findBooleanSurveyQuestionList(
+    findBooleanSurveyListDto: FindBooleanSurveyQuestionListDto,
     pagination?: Pagination,
     transactionManager?: EntityManager,
   ) {
-    let query: SelectQueryBuilder<BooleanSurvey>;
+    let query: SelectQueryBuilder<BooleanSurveyQuestion>;
 
     if (transactionManager) {
       query = transactionManager.createQueryBuilder(
-        BooleanSurvey,
+        BooleanSurveyQuestion,
         'booleanSurvey',
       );
     } else {
-      query = this.createQueryBuilder('booleanSurvey');
+      query = this.booleanSurveyQuestion.createQueryBuilder('booleanSurvey');
     }
 
     const { surveyName } = findBooleanSurveyListDto;
@@ -50,7 +56,7 @@ export class BooleanSurveyRepository extends Repository<BooleanSurvey> {
     const [list, count] = await query.getManyAndCount();
 
     if (!list || list.length < 1 || count < 1) {
-      throw new NotFoundException();
+      throw new NotFoundException(constants.errorMessages.INVALID_SURVEY_NAME);
     }
 
     return { list, count };

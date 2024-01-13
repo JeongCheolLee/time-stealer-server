@@ -1,13 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CoreSoftEntity } from 'src/common/entities/core-soft.entity';
 import { Column, Entity, Index } from 'typeorm';
-import { constants } from '../boolean-survey.constants';
 
-@Index(constants.props.UNIQUE_BOOLEAN_SURVEY_NAME, ['surveyName'], {
-  unique: true,
-})
-@Entity({ name: 'BooleanSurvey' })
-export class BooleanSurvey extends CoreSoftEntity {
+@Index(['surveyName'], { unique: false })
+@Entity({ name: 'BooleanSurveyQuestions' })
+export class BooleanSurveyQuestion extends CoreSoftEntity {
   @ApiProperty({
     description: '설문 타입',
     example: '간단 성격 검사',
