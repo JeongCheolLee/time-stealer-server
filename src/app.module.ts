@@ -33,7 +33,9 @@ import { SurveyModule } from './domain/survey/survey.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       schema: process.env.DB_SCHEMA_NAME,
-      ssl: process.env.DB_SSL === 'true',
+      ssl: {
+        rejectUnauthorized: false,
+      },
       logging: process.env.DB_LOGGING === 'true',
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
       synchronize: process.env.NODE_ENV !== 'prod',
