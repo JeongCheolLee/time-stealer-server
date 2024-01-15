@@ -1,9 +1,5 @@
 import { EntityManager, Repository, SelectQueryBuilder } from 'typeorm';
-import {
-  NotFoundException,
-  BadRequestException,
-  Injectable,
-} from '@nestjs/common';
+import { NotFoundException, Injectable } from '@nestjs/common';
 import { BooleanSurveyQuestion } from '../entities/boolean-survey-question.entity';
 import { Pagination } from 'src/common/decorators/pagination-query.decorator';
 import { FindBooleanSurveyQuestionListDto } from '../dto/find-boolean-survey-question-list.dto';
@@ -34,12 +30,20 @@ export class BooleanSurveyQuestionRepository {
       query = this.booleanSurveyQuestion.createQueryBuilder('booleanSurvey');
     }
 
-    const { surveyName } = findBooleanSurveyListDto;
+    query.leftJoin('booleanSurvey.survey', 'survey');
 
-    if (!surveyName) {
-      throw new BadRequestException(
-        constants.errorMessages.INVALID_SURVEY_NAME,
-      );
+    const { surveyName, surveyId } = findBooleanSurveyListDto;
+
+    if (surveyName) {
+      query.andWhere('survey.surveyName = :surveyName', {
+        surveyName,
+      });
+    }
+
+    if (surveyId) {
+      query.andWhere('booleanSurvey.surveyId = :surveyId', {
+        surveyId,
+      });
     }
 
     let page = commonConstants.defaultQuery.PAGE;

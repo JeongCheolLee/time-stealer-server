@@ -1,7 +1,12 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { BooleanSurveyQuestionService as BooleanSurveyQuestionService } from './services/boolean-survey-question.service';
 import { FindBooleanSurveyQuestionListDto } from './dto/find-boolean-survey-question-list.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { BooleanSurveyQuestionDto } from './dto/boolean-survey-question.dto';
+import { ApiDoc } from 'src/common/decorators/api-doc.decorator';
+import { ListResponse } from 'src/common/dtos/list-response.dto';
+import { BooleanSurveyResultDto } from './dto/boolean-survey-result.dto';
+import { FindBooleanSurveyResultDto } from './dto/find-boolean-survey-result.dto';
 
 @ApiTags('boolean-survey')
 @Controller('boolean-survey')
@@ -10,13 +15,21 @@ export class BooleanSurveyQuestionController {
     private readonly booleanSurveyQuestionService: BooleanSurveyQuestionService,
   ) {}
 
+  @ApiDoc({
+    summary: '질문 목록을 조회합니다.',
+    responseModel: BooleanSurveyQuestionDto,
+    isArrayResponse: true,
+  })
   @Get('questions')
   async findBooleanSurveyQuestionList(
     @Query() findBooleanSurveyListDto: FindBooleanSurveyQuestionListDto,
   ) {
-    return await this.booleanSurveyQuestionService.findBooleanSurveyQuestionList(
-      findBooleanSurveyListDto,
-    );
+    const { list, count } =
+      await this.booleanSurveyQuestionService.findBooleanSurveyQuestionList(
+        findBooleanSurveyListDto,
+      );
+
+    return new ListResponse(list, count);
   }
 }
 
@@ -27,12 +40,14 @@ export class BooleanSurveyAnswerController {
     private readonly booleanSurveyQuestionService: BooleanSurveyQuestionService,
   ) {}
 
-  @Get('answer')
+  @ApiDoc({
+    summary: '설문의 결과를 조회합니다.',
+    responseModel: BooleanSurveyResultDto,
+  })
+  @Post('answer')
   async findBooleanSurveyQuestionList(
-    @Query() findBooleanSurveyListDto: FindBooleanSurveyQuestionListDto,
+    @Body() findBooleanSurveyResultDto: FindBooleanSurveyResultDto,
   ) {
-    return await this.booleanSurveyQuestionService.findBooleanSurveyQuestionList(
-      findBooleanSurveyListDto,
-    );
+    return true;
   }
 }

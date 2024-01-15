@@ -4,6 +4,7 @@ import Joi from 'joi';
 import { BooleanSurveyModule } from './domain/boolean-survey/boolean-survey.module';
 import envFilePath from 'envs/env';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SurveyModule } from './domain/survey/survey.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
       synchronize: process.env.NODE_ENV !== 'prod',
     }),
+    SurveyModule,
   ],
   controllers: [],
   providers: [],

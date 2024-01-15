@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CoreSoftEntity } from 'src/common/entities/core-soft.entity';
-import { Column, Entity, Index } from 'typeorm';
+import { Survey } from 'src/domain/survey/entities/survey.entity';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
-@Index(['surveyName'], { unique: false })
+@Index(['survey'], { unique: false })
 @Entity({ name: 'BooleanSurveyQuestions' })
 export class BooleanSurveyQuestion extends CoreSoftEntity {
   @ApiProperty({
@@ -10,13 +11,11 @@ export class BooleanSurveyQuestion extends CoreSoftEntity {
     example: '간단 성격 검사',
     required: true,
   })
-  @Column({
-    comment: '설문 타입',
-    type: 'varchar',
+  @ManyToOne(() => Survey, (survey) => survey.id, {
     nullable: false,
-    length: 30,
   })
-  surveyName: string;
+  @JoinColumn()
+  survey: Survey;
 
   @ApiProperty({
     description: '질문',
@@ -56,4 +55,16 @@ export class BooleanSurveyQuestion extends CoreSoftEntity {
     length: 100,
   })
   negativeAnswer: string;
+
+  @ApiProperty({
+    description: '결과의 자릿수, 1이라면 XXXX 결과의 첫번째',
+    example: 1,
+    required: false,
+  })
+  @Column({
+    comment: '결과의 자릿수',
+    type: 'int4',
+    nullable: true,
+  })
+  resultPlace: number;
 }
