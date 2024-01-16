@@ -67,4 +67,17 @@ export class BooleanSurveyQuestion extends CoreSoftEntity {
     nullable: true,
   })
   resultPlace: number;
+
+  @ApiProperty({
+    description: '질문 이미지',
+    example: 'https://sample.image.co.kr',
+    required: true,
+  })
+  @Column({
+    comment: '질문 이미지',
+    type: 'varchar',
+    nullable: false,
+    length: 200,
+  })
+  questionImage: string;
 }
