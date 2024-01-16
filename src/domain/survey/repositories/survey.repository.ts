@@ -1,4 +1,9 @@
-import { EntityManager, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  EntityManager,
+  Repository,
+  SelectQueryBuilder,
+  UpdateResult,
+} from 'typeorm';
 import { NotFoundException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Survey } from '../entities/survey.entity';
@@ -7,6 +12,7 @@ import { constants } from '../survey.constants';
 import { Pagination } from 'src/common/decorators/pagination-query.decorator';
 import { commonConstants } from 'src/common/constants/common.constants';
 import { FindSurveyListDto } from '../dtos/find-survey-list.dto';
+import { ModifySurveyDto } from '../dtos/modify-survey.dto';
 
 @Injectable()
 export class SurveyRepository {
@@ -93,5 +99,30 @@ export class SurveyRepository {
     }
 
     return { list, count };
+  }
+
+  async updateSurvey(
+    id: number,
+    modifySurveyDto: ModifySurveyDto,
+    transactionManager?: EntityManager,
+  ) {
+    try {
+      let result: UpdateResult;
+      if (transactionManager) {
+        result = await transactionManager.update(Survey, id, modifySurveyDto);
+      } else {
+        result = await this.surveyRepository.update(id, modifySurveyDto);
+      }
+
+      return result;
+    } catch (e) {
+      const props = constants.props;
+      const errorMessages = constants.errorMessages;
+
+      switch (e.constraint) {
+        default:
+          throw e;
+      }
+    }
   }
 }

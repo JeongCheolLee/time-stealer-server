@@ -7,17 +7,24 @@ import { FindBooleanSurveyResultDto } from '../dto/find-boolean-survey-result.dt
 import { BooleanSurveyQuestionService } from './boolean-survey-question.service';
 import { constants } from '../boolean-survey.constants';
 import { BooleanSurveyResultRepository } from '../repositories/boolean-survey-result.repository';
+import { SurveyService } from 'src/domain/survey/services/survey.service';
 
 @Injectable()
 export class BooleanSurveyAnswerService {
   constructor(
     private readonly booleanSurveyRepository: BooleanSurveyResultRepository,
     private readonly booleanSurveyQuestionService: BooleanSurveyQuestionService,
+    private readonly surveyService: SurveyService,
   ) {}
 
   async findBooleanSurveyResult(
     findBooleanSurveyResultDto: FindBooleanSurveyResultDto,
   ) {
+    // STEP1. 모든 질문에 응답되었는지 검증
+    // STEP2. 응답한 질문이 해당 설문에 존재하는 질문인지 검증 및 질문 객체 answers에 매핑
+    // STEP3. 결과 자릿수별 결과 확인
+    //STEP4. 조회수 더해주기
+    //STEP05. 결과 리턴
     const surveyId = findBooleanSurveyResultDto.surveyId;
     const surveyQuestionList =
       await this.booleanSurveyQuestionService.findBooleanSurveyQuestionList({
@@ -71,6 +78,10 @@ export class BooleanSurveyAnswerService {
       );
     }
 
+    //STEP4. 조회수 더해주기
+    await this.surveyService.plusSurveyViews(surveyId);
+
+    //STEP05. 결과 리턴
     const surveyResult =
       await this.booleanSurveyRepository.findBooleanSurveyResult(
         findBooleanSurveyResultDto.surveyId,

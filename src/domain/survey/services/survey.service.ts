@@ -30,4 +30,21 @@ export class SurveyService {
       transactionManager,
     );
   }
+
+  async plusSurveyViews(id: number, transactionManager?: EntityManager) {
+    const target = await this.surveyRepository.findSurvey(
+      { id: id },
+      transactionManager,
+    );
+
+    const views = target.views;
+
+    await this.surveyRepository.updateSurvey(
+      id,
+      { views: views + 1 },
+      transactionManager,
+    );
+
+    return;
+  }
 }

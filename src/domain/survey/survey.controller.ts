@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { SurveyService } from './services/survey.service';
 import { ApiTags } from '@nestjs/swagger';
 import { FindSurveyListDto } from './dtos/find-survey-list.dto';
@@ -9,6 +9,7 @@ import {
 import { ListResponse } from 'src/common/dtos/list-response.dto';
 import { ApiDoc } from 'src/common/decorators/api-doc.decorator';
 import { Survey } from './entities/survey.entity';
+import { ObjectResponse } from 'src/common/dtos/object-response.dto';
 
 @ApiTags('설문')
 @Controller('surveys')
@@ -18,6 +19,7 @@ export class SurveyController {
   @ApiDoc({
     summary: '설문 리스트를 조회합니다.',
     responseModel: Survey,
+    isArrayResponse: true,
   })
   @Get()
   async findSurveyList(
@@ -30,5 +32,16 @@ export class SurveyController {
     );
 
     return new ListResponse(list, count);
+  }
+
+  @ApiDoc({
+    summary: '설문를 조회합니다.',
+    responseModel: Survey,
+  })
+  @Get(':id')
+  async findSurveyById(@Param('id') id: number) {
+    const survey = await this.surveyService.findSurvey({ id });
+
+    return new ObjectResponse(survey);
   }
 }
