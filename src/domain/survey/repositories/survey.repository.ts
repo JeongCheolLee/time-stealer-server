@@ -4,6 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Survey } from '../entities/survey.entity';
 import { FindSurveyDto } from '../dtos/find-survey.dto';
 import { constants } from '../survey.constants';
+import { Pagination } from 'src/common/decorators/pagination-query.decorator';
+import { commonConstants } from 'src/common/constants/common.constants';
+import { FindSurveyListDto } from '../dtos/find-survey-list.dto';
 
 @Injectable()
 export class SurveyRepository {
@@ -49,5 +52,46 @@ export class SurveyRepository {
     }
 
     return result;
+  }
+
+  async findSurveyList(
+    findSurveyListDto: FindSurveyListDto,
+    pagination?: Pagination,
+    transactionManager?: EntityManager,
+  ) {
+    let query: SelectQueryBuilder<Survey>;
+
+    if (transactionManager) {
+      query = transactionManager.createQueryBuilder(Survey, 'survey');
+    } else {
+      query = this.surveyRepository.createQueryBuilder('survey');
+    }
+
+    const { surveyName } = findSurveyListDto;
+
+    if (surveyName) {
+      query.andWhere('survey.surveyName ILIKE :surveyName', {
+        surveyName: `%${surveyName}%`,
+      });
+    }
+
+    let page = commonConstants.defaultQuery.PAGE;
+    let pageSize = commonConstants.defaultQuery.PAGE_SIZE;
+
+    if (pagination) {
+      page = pagination.page || page;
+      pageSize = pagination.pageSize || pageSize;
+    }
+
+    query.take(pageSize);
+    query.skip(pageSize * (page - 1));
+
+    const [list, count] = await query.getManyAndCount();
+
+    if (!list || list.length < 1 || count < 1) {
+      throw new NotFoundException(constants.errorMessages.SURVEY_NOT_FOUND);
+    }
+
+    return { list, count };
   }
 }

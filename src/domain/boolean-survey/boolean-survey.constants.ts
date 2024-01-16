@@ -1,7 +1,7 @@
 export const constants = {
   props: {},
   errorMessages: {
-    INVALID_SURVEY_NAME: '설문명을 확인해주세요.',
+    INVALID_SURVEY_NAME: '해당하는 설문이 존재하지 않습니다.',
     INVALID_QUESTION_ID:
       '해당 설문에 존재하지 않는 질문에 대한 응답이 존재합니다.',
     EVERY_QUESTION_SHOULD_BE_ANSWERED:

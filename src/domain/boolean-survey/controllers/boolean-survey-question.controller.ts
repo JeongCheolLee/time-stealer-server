@@ -10,7 +10,7 @@ import { FindBooleanSurveyResultDto } from '../dto/find-boolean-survey-result.dt
 import { BooleanSurveyAnswerService } from '../services/boolean-survey-answer.service';
 import { ObjectResponse } from 'src/common/dtos/object-response.dto';
 
-@ApiTags('boolean-survey')
+@ApiTags('설문 질문')
 @Controller('boolean-survey')
 export class BooleanSurveyQuestionController {
   constructor(
@@ -35,7 +35,7 @@ export class BooleanSurveyQuestionController {
   }
 }
 
-@ApiTags('boolean-survey')
+@ApiTags('설문 결과')
 @Controller('boolean-survey')
 export class BooleanSurveyAnswerController {
   constructor(

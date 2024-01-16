@@ -32,4 +32,41 @@ export class Survey extends CoreSoftEntity {
   })
   @Column({ type: 'timestamptz', nullable: true })
   endedAt: Date;
+
+  @ApiProperty({
+    description: '설문의 썸네일 이미지',
+    example: 'https://sample.image.co.kr',
+    required: true,
+  })
+  @Column({
+    comment: '설문 타입',
+    type: 'varchar',
+    nullable: false,
+    length: 200,
+  })
+  surveyThumbnail: string;
+
+  @ApiProperty({
+    description: '설문 예상 소요시간',
+    example: 4,
+    required: true,
+  })
+  @Column({
+    comment: '설문 예상 소요시간',
+    type: 'int4',
+    nullable: false,
+  })
+  estimatedTime: number;
+
+  @ApiProperty({
+    description: '설문조사된 횟수',
+    example: 4247182937,
+    required: true,
+  })
+  @Column({
+    comment: '설문조사된 횟수',
+    type: 'int4',
+    nullable: false,
+  })
+  views: number;
 }

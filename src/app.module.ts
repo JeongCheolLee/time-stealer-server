@@ -24,7 +24,6 @@ import { SurveyModule } from './domain/survey/survey.module';
         DB_LOGGING: Joi.string().required(),
       }),
     }),
-    BooleanSurveyModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -41,6 +40,7 @@ import { SurveyModule } from './domain/survey/survey.module';
       synchronize: process.env.NODE_ENV !== 'prod',
     }),
     SurveyModule,
+    BooleanSurveyModule,
   ],
   controllers: [],
   providers: [],
