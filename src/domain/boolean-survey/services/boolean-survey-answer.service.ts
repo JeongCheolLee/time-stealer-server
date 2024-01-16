@@ -59,9 +59,9 @@ export class BooleanSurveyAnswerService {
       const falseCount = filtered.filter((e) => e.response === false).length;
 
       if (trueCount > falseCount) {
-        resultCode += 'A';
+        resultCode += 'O';
       } else {
-        resultCode += 'B';
+        resultCode += 'X';
       }
     }
 

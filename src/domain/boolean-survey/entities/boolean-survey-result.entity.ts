@@ -33,7 +33,14 @@ export class BooleanSurveyResult extends CoreSoftEntity {
 
   @ApiProperty({
     description: '답변 json',
-    example: { code: '금사빠', personality: '사랑에 쉽게 빠짐' },
+    example: {
+      type: '생활의 달인 출신 붕어빵 장수',
+      badWith: '무료해진 자산가',
+      goodWith: '쓱싹쓱싹 환경미화원',
+      imageUrl: '',
+      description: '',
+      surveyResultCode: 'OOOO',
+    },
     required: true,
   })
   @Column({
