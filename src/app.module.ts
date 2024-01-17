@@ -5,6 +5,7 @@ import { BooleanSurveyModule } from './domain/boolean-survey/boolean-survey.modu
 import envFilePath from 'envs/env';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SurveyModule } from './domain/survey/survey.module';
+import { HealthCheckModule } from './domain/health-check/health-check.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { SurveyModule } from './domain/survey/survey.module';
     }),
     SurveyModule,
     BooleanSurveyModule,
+    HealthCheckModule,
   ],
   controllers: [],
   providers: [],
