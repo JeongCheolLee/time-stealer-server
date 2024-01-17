@@ -17,6 +17,16 @@ export class BooleanSurveyAnswerService {
     private readonly surveyService: SurveyService,
   ) {}
 
+  async findBooleanSurveyResultByServiceIdAndCode(
+    surveyId: number,
+    surveyResultCode: string,
+  ) {
+    return await this.booleanSurveyRepository.findBooleanSurveyResult(
+      surveyId,
+      surveyResultCode,
+    );
+  }
+
   async findBooleanSurveyResult(
     findBooleanSurveyResultDto: FindBooleanSurveyResultDto,
   ) {

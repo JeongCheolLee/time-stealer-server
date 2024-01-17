@@ -9,6 +9,7 @@ import { BooleanSurveyResultDto } from '../dto/boolean-survey-result.dto';
 import { FindBooleanSurveyResultDto } from '../dto/find-boolean-survey-result.dto';
 import { BooleanSurveyAnswerService } from '../services/boolean-survey-answer.service';
 import { ObjectResponse } from 'src/common/dtos/object-response.dto';
+import { FindBooleanSurveyResultByIdAndCodeDto } from '../dto/find-boolean-survey-result-by-id-and-code.dto';
 
 @ApiTags('설문 질문')
 @Controller('boolean-survey')
@@ -43,11 +44,29 @@ export class BooleanSurveyAnswerController {
   ) {}
 
   @ApiDoc({
+    summary: '설문의 결과를 id와 code로 조회합니다.',
+    responseModel: BooleanSurveyResultDto,
+  })
+  @Get('result')
+  async findBooleanSurveyResultByCode(
+    @Query()
+    findBooleanSurveyResultByIdAndCodeDto: FindBooleanSurveyResultByIdAndCodeDto,
+  ) {
+    const result =
+      await this.booleanSurveyAnswerService.findBooleanSurveyResultByServiceIdAndCode(
+        findBooleanSurveyResultByIdAndCodeDto.surveyId,
+        findBooleanSurveyResultByIdAndCodeDto.surveyResultCode,
+      );
+
+    return new ObjectResponse(result);
+  }
+
+  @ApiDoc({
     summary: '설문의 결과를 조회합니다.',
     responseModel: BooleanSurveyResultDto,
   })
   @Post('result')
-  async findBooleanSurveyQuestionList(
+  async findBooleanSurveyResult(
     @Body() findBooleanSurveyResultDto: FindBooleanSurveyResultDto,
   ) {
     const result =
