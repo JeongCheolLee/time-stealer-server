@@ -47,6 +47,19 @@ export class Survey extends CoreSoftEntity {
   surveyThumbnail: string;
 
   @ApiProperty({
+    description: '설문의 설명',
+    example: '그냥 저냥..말은 될 겁니다.. 내 성격겁사',
+    required: true,
+  })
+  @Column({
+    comment: '설문의 설명',
+    type: 'varchar',
+    nullable: true,
+    length: 200,
+  })
+  surveyDescription: string;
+
+  @ApiProperty({
     description: '설문 예상 소요시간',
     example: 4,
     required: true,
